@@ -50,7 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 isViewText: true,
               ),
               const SizedBox(height: 20),
-              AuthGradientButton(buttonText: 'Sign In'),
+              AuthGradientButton(buttonText: 'Sign In',
+              onPressed: (){},
+              ),
               const SizedBox(height: 15),
               GestureDetector(
                 onTap: () {
