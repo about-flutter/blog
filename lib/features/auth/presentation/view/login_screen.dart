@@ -2,23 +2,23 @@ import 'package:blog/core/theme/appPalette.dart';
 import 'package:blog/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:blog/features/auth/presentation/widgets/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
-  final nameController = TextEditingController();
+
   final passwordController = TextEditingController();
   @override
   void dispose() {
     emailController.dispose();
-    nameController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -34,7 +34,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Sign Up',
+                'Sign In',
                 style: TextStyle(
                   fontSize: 25,
                   color: AppPalette.whiteColor,
@@ -42,32 +42,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              AuthField(hintText: 'Name', 
-              controller: nameController),
+              AuthField(hintText: 'Email', controller: emailController),
               const SizedBox(height: 10),
-              AuthField(hintText: 'Email', 
-              controller: emailController),
-              const SizedBox(height: 10),
-              AuthField(hintText: 'Password', 
-              controller: passwordController,
-              isViewText: true,
+              AuthField(
+                hintText: 'Password',
+                controller: passwordController,
+                isViewText: true,
               ),
               const SizedBox(height: 20),
-              AuthGradientButton(),
+              AuthGradientButton(buttonText: 'Sign In'),
               const SizedBox(height: 15),
-              RichText(
-                text: TextSpan(
-                  text: 'Already have an acount?',
-                  style: Theme.of(context).textTheme.titleMedium,
-                  children: [
-                    TextSpan(
-                      text: ' Sign In',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: AppPalette.gradient2,
-                        fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: () {
+                  Modular.to.pushNamed('/auth/signup');
+                },
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Don\'t have an account?',
+                    style: Theme.of(context).textTheme.titleMedium,
+                    children: [
+                      TextSpan(
+                        text: ' Sign Up',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color: AppPalette.gradient2,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
