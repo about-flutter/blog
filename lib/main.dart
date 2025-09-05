@@ -1,10 +1,17 @@
 
 import 'package:blog/app_module.dart';
+import 'package:blog/core/secrets/app_secret.dart';
 import 'package:blog/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: AppSecret.supabaseUrl,
+    anonKey: AppSecret.supabaseAnonKey
+  );
   runApp(ModularApp(module: AppModule(), child: const MyApp()));
 }
 
