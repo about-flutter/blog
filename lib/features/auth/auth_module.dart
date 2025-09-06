@@ -1,6 +1,7 @@
 import 'package:blog/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:blog/features/auth/domain/repository/auth_repository.dart';
+import 'package:blog/features/auth/domain/usecases/user_login.dart';
 import 'package:blog/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog/features/auth/presentation/view/login_screen.dart';
@@ -21,11 +22,17 @@ class AuthModule extends Module {
     // Repository
     i.add<AuthRepository>(AuthRepositoryImpl.new);
 
-    // UseCase
+    // UseCases
     i.add<UserSignUp>(UserSignUp.new);
+    i.add<UserLogin>(UserLogin.new);
 
-    // Bloc (cần UserSignUp)
-    i.addSingleton<AuthBloc>(() => AuthBloc(userSignUp: i.get<UserSignUp>()));
+    // Bloc (cần cả UserSignUp và UserLogin)
+    i.addSingleton<AuthBloc>(
+      () => AuthBloc(
+        userSignUp: i.get<UserSignUp>(),
+        userLogin: i.get<UserLogin>(),
+      ),
+    );
   }
 
   @override

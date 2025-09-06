@@ -1,4 +1,6 @@
+import 'package:blog/core/common/widgets/loader.dart';
 import 'package:blog/core/theme/appPalette.dart';
+import 'package:blog/core/utils/show_snackbar.dart';
 import 'package:blog/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:blog/features/auth/presentation/widgets/text_field.dart';
@@ -34,17 +36,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         bloc: Modular.get<AuthBloc>(),
         listener: (context, state) {
           if (state is AuthSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Sign up successful!')),
-            );
+            showSnackBar(context, 'Sign up successful!');
             // Navigate back to login screen after a short delay
             Future.delayed(const Duration(seconds: 2), () {
               Modular.to.pop();
             });
           } else if (state is AuthFailure) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            showSnackBar(context, state.message);
           }
         },
         child: Padding(
@@ -77,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   bloc: Modular.get<AuthBloc>(),
                   builder: (context, state) {
                     if (state is AuthLoading) {
-                      return const CircularProgressIndicator();
+                      return const Loader();
                     }
                     return AuthGradientButton(
                       buttonText: 'Sign Up',
