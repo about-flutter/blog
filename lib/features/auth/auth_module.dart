@@ -1,38 +1,16 @@
-import 'package:blog/features/auth/data/datasources/auth_remote_datasource.dart';
-import 'package:blog/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:blog/features/auth/domain/repository/auth_repository.dart';
-import 'package:blog/features/auth/domain/usecases/user_login.dart';
-import 'package:blog/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog/features/auth/presentation/view/login_screen.dart';
 import 'package:blog/features/auth/presentation/view/signup_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthModule extends Module {
   @override
   void binds(Injector i) {
-    // SupabaseClient
-    i.addInstance<SupabaseClient>(Supabase.instance.client);
-
-    // DataSource
-    i.add<AuthRemoteDataSource>(AuthRemoteDatasourceImpl.new);
-
-    // Repository
-    i.add<AuthRepository>(AuthRepositoryImpl.new);
-
-    // UseCases
-    i.add<UserSignUp>(UserSignUp.new);
-    i.add<UserLogin>(UserLogin.new);
-
-    // Bloc (cần cả UserSignUp và UserLogin)
-    i.addSingleton<AuthBloc>(
-      () => AuthBloc(
-        userSignUp: i.get<UserSignUp>(),
-        userLogin: i.get<UserLogin>(),
-      ),
-    );
+    // Bindings are handled in AppModule (DI). This module only exposes
+    // the auth routes when using Flutter Modular routing. If you prefer
+    // Navigator-based routing (MaterialApp), you can keep DI in AppModule
+    // and ignore these routes.
   }
 
   @override

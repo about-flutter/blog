@@ -16,6 +16,11 @@ static border([Color color = AppPalette.borderColor]) => OutlineInputBorder(
     appBarTheme: AppBarTheme(
       backgroundColor: AppPalette.backgroundColor,
     ),
+    chipTheme: ChipThemeData(
+      color:WidgetStatePropertyAll(AppPalette.backgroundColor),
+       side:BorderSide.none,
+    ),
+   
    inputDecorationTheme: InputDecorationTheme(
     contentPadding: const EdgeInsets.all(16),
     enabledBorder: border(),

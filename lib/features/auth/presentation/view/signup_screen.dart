@@ -33,13 +33,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: BlocListener<AuthBloc, AuthState>(
-        bloc: Modular.get<AuthBloc>(),
+        bloc: BlocProvider.of<AuthBloc>(context),
         listener: (context, state) {
           if (state is AuthSuccess) {
             showSnackBar(context, 'Sign up successful!');
             // Navigate back to login screen after a short delay
             Future.delayed(const Duration(seconds: 2), () {
-              Modular.to.pop();
+              Modular.to.navigate('/auth/');
             });
           } else if (state is AuthFailure) {
             showSnackBar(context, state.message);
@@ -72,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 20),
                 BlocBuilder<AuthBloc, AuthState>(
-                  bloc: Modular.get<AuthBloc>(),
+                  bloc: BlocProvider.of<AuthBloc>(context),
                   builder: (context, state) {
                     if (state is AuthLoading) {
                       return const Loader();
@@ -81,7 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       buttonText: 'Sign Up',
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
-                          Modular.get<AuthBloc>().add(
+                          BlocProvider.of<AuthBloc>(context).add(
                             AuthSignUp(
                               email: emailController.text.trim(),
                               password: passwordController.text.trim(),
@@ -96,8 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 15),
                 GestureDetector(
                   onTap: () {
-                    Modular.to.pop();
-                    // Modular.to.navigate('/auth/');
+                    Modular.to.navigate('/auth/');
                   },
                   child: RichText(
                     text: TextSpan(

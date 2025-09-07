@@ -1,6 +1,5 @@
 import 'package:blog/core/common/widgets/loader.dart';
 import 'package:blog/core/theme/appPalette.dart';
-import 'package:blog/core/utils/show_snackbar.dart';
 import 'package:blog/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:blog/features/auth/presentation/widgets/text_field.dart';
@@ -31,14 +30,16 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
-        bloc: Modular.get<AuthBloc>(),
+        bloc: BlocProvider.of<AuthBloc>(context),
         listener: (context, state) {
           if (state is AuthSuccess) {
-             showSnackBar(context, 'Login successful!');
-            // Navigate to home screen or main app
-            // Modular.to.pushReplacementNamed('/home');
+            // Navigate to blog screen when login is successful
+            Modular.to.navigate('/blog/');
           } else if (state is AuthFailure) {
-            showSnackBar(context, state.message);
+            // Show error message
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         child: Padding(
@@ -66,16 +67,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
                 BlocBuilder<AuthBloc, AuthState>(
-                  bloc: Modular.get<AuthBloc>(),
+                  bloc: BlocProvider.of<AuthBloc>(context),
                   builder: (context, state) {
                     if (state is AuthLoading) {
-                       return const Loader();
+                      return const Loader();
                     }
                     return AuthGradientButton(
                       buttonText: 'Sign In',
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
-                          Modular.get<AuthBloc>().add(
+                          BlocProvider.of<AuthBloc>(context).add(
                             AuthLogin(
                               email: emailController.text.trim(),
                               password: passwordController.text.trim(),
