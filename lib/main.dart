@@ -28,26 +28,18 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Check if user is already logged in
-      Modular.get<auth.AuthBloc>().add(auth.AuthIsUserLoggedIn());
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final authBloc = Modular.get<auth.AuthBloc>();
-
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: authBloc),
-        BlocProvider(create: (_) => AppUserCubit(authBloc)),
+        BlocProvider.value(value: Modular.get<auth.AuthBloc>()),
+        BlocProvider.value(value: Modular.get<AppUserCubit>()),
       ],
       child: BlocListener<AppUserCubit, AppUserState>(
-        listenWhen: (previous, current) =>
-            previous != current, // Chỉ lắng nghe khi trạng thái thay đổi
+        listenWhen: (previous, current) => previous != current,
         listener: (context, state) {
-          // Listen for authentication state changes and navigate accordingly
           if (state is AppUserLoggedIn) {
             Modular.to.navigate('/blog/');
           } else if (state is AppUserInitial) {

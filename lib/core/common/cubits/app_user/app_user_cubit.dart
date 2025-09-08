@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:blog/core/common/entities/user.dart';
 import 'package:blog/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 part 'app_user_state.dart';
 
@@ -21,6 +21,9 @@ class AppUserCubit extends Cubit<AppUserState> {
         emit(AppUserLoading());
       }
     });
+
+    // Tự động check user khi khởi tạo
+    authBloc.add(AuthIsUserLoggedIn());
   }
 
   @override
@@ -29,3 +32,4 @@ class AppUserCubit extends Cubit<AppUserState> {
     return super.close();
   }
 }
+

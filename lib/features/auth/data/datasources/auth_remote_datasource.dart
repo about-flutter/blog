@@ -17,10 +17,10 @@ abstract interface class AuthRemoteDataSource {
   Future<UserModel?> getCurrentUser();
 }
 
-class AuthRemoteDatasourceImpl implements AuthRemoteDataSource {
+class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final SupabaseClient supabaseClient;
 
-  AuthRemoteDatasourceImpl(this.supabaseClient);
+  AuthRemoteDataSourceImpl(this.supabaseClient);
 
   @override
   Future<UserModel> logInWithEmailPassword({
