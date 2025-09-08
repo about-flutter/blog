@@ -27,7 +27,7 @@ class _AddNewBlogState extends State<AddNewBlog> {
 
   void selectImage() async {
     final pickedImage = await pickImage();
-    if(pickedImage != null){
+    if (pickedImage != null) {
       setState(() {
         image = pickedImage;
         print('Đã lấy ảnh: ${image?.path}');
@@ -48,7 +48,7 @@ class _AddNewBlogState extends State<AddNewBlog> {
     final appUserCubit = BlocProvider.of<AppUserCubit>(context);
     final appUserState = appUserCubit.state;
     final userId = appUserState is AppUserLoggedIn ? appUserState.user.id : '';
-    
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -70,16 +70,17 @@ class _AddNewBlogState extends State<AddNewBlog> {
               }
               return IconButton(
                 onPressed: () {
-                  if (titleController.text.isEmpty || contentController.text.isEmpty) {
+                  if (titleController.text.isEmpty ||
+                      contentController.text.isEmpty) {
                     showSnackBar(context, 'Please fill all fields');
                     return;
                   }
-                  
+
                   if (selectedTopics.isEmpty) {
                     showSnackBar(context, 'Please select at least one topic');
                     return;
                   }
-                  
+
                   BlocProvider.of<BlogBloc>(context).add(
                     BlogUpload(
                       image: image,
@@ -89,8 +90,8 @@ class _AddNewBlogState extends State<AddNewBlog> {
                       topics: selectedTopics,
                     ),
                   );
-                }, 
-                icon: const Icon(Icons.done_rounded)
+                },
+                icon: const Icon(Icons.done_rounded),
               );
             },
           ),
@@ -101,45 +102,48 @@ class _AddNewBlogState extends State<AddNewBlog> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              image != null ?
-              GestureDetector(
-                onTap: selectImage,
-                child: SizedBox(
-                  width: double.infinity,
-                height: 150,
-                child: ClipRRect( borderRadius: BorderRadius.circular(10),
-                  child: Image.file(image!),)),
-              ) :
-              GestureDetector(
-                onTap:selectImage,
-                child: Container(
-                  height: 150,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AppPalette.borderColor,
-                      width: 1,
-                      style: BorderStyle.solid,
+              image != null
+                  ? GestureDetector(
+                      onTap: selectImage,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 150,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.file(image!),
+                        ),
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: selectImage,
+                      child: Container(
+                        height: 150,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppPalette.borderColor,
+                            width: 1,
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.folder_open,
+                              size: 40,
+                              color: Colors.grey[400],
+                            ),
+                            const SizedBox(height: 15),
+                            const Text(
+                              'Select your image',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.folder_open,
-                        size: 40,
-                        color: Colors.grey[400],
-                      ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        'Select your image',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               SizedBox(height: 10),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
