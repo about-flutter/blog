@@ -1,4 +1,5 @@
 import 'package:blog/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:blog/core/network/connection_checker.dart';
 import 'package:blog/features/auth/auth_module.dart';
 import 'package:blog/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog/features/auth/data/repositories/auth_repository_impl.dart';
@@ -9,6 +10,7 @@ import 'package:blog/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog/features/blog/blog_module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AppModule extends Module {
@@ -16,6 +18,10 @@ class AppModule extends Module {
   void binds(i) {
     // SupabaseClient
     i.addInstance<SupabaseClient>(Supabase.instance.client);
+
+    // Network
+    i.addInstance<InternetConnection>(InternetConnection());
+    i.add<ConnectionChecker>(ConnectionCheckerImpl.new);
 
     // Datasource
     i.add<AuthRemoteDataSource>(AuthRemoteDataSourceImpl.new);

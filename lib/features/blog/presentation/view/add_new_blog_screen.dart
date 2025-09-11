@@ -7,19 +7,19 @@ import 'package:blog/core/utils/pick_image.dart';
 import 'package:blog/core/utils/show_snackbar.dart';
 import 'package:blog/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog/features/blog/presentation/widgets/blog_edt.dart';
-import 'package:dotted_border/dotted_border.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class AddNewBlog extends StatefulWidget {
-  const AddNewBlog({super.key});
+class AddNewBlogScreen extends StatefulWidget {
+  const AddNewBlogScreen({super.key});
 
   @override
-  State<AddNewBlog> createState() => _AddNewBlogState();
+  State<AddNewBlogScreen> createState() => _AddNewBlogScreenState();
 }
 
-class _AddNewBlogState extends State<AddNewBlog> {
+class _AddNewBlogScreenState extends State<AddNewBlogScreen> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   List<String> selectedTopics = [];
@@ -54,7 +54,7 @@ class _AddNewBlogState extends State<AddNewBlog> {
         actions: [
           BlocConsumer<BlogBloc, BlogState>(
             listener: (context, state) {
-              if (state is BlogSuccess) {
+              if (state is BlogUpLoadSuccess) {
                 showSnackBar(context, 'Blog uploaded successfully!');
                 Modular.to.navigate('/blog/');
               } else if (state is BlogFailure) {

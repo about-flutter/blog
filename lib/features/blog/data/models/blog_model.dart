@@ -11,6 +11,7 @@ class BlogModel extends Blog {
     super.imageUrl,
     required super.topics,
     required super.updatedAt,
+    super.posterName,
   });
 
   /// copyWith để update một số field mà không cần tạo mới toàn bộ
@@ -22,6 +23,7 @@ class BlogModel extends Blog {
     String? imageUrl,
     List<String>? topics,
     DateTime? updatedAt,
+    String? posterName,
   }) {
     return BlogModel(
       id: id ?? this.id,
@@ -31,6 +33,7 @@ class BlogModel extends Blog {
       imageUrl: imageUrl ?? this.imageUrl,
       topics: topics ?? this.topics,
       updatedAt: updatedAt ?? this.updatedAt,
+      posterName: posterName ?? this.posterName,
     );
   }
 
@@ -44,6 +47,9 @@ class BlogModel extends Blog {
       imageUrl: map['image_url'] as String?,
       topics: List<String>.from(map['topics'] ?? []),
       updatedAt: DateTime.parse(map['updated_at']),
+      posterName: map['profiles'] != null
+          ? map['profiles']['name'] as String?
+          : null,
     );
   }
 
@@ -57,6 +63,7 @@ class BlogModel extends Blog {
       'image_url': imageUrl,
       'topics': topics,
       'updated_at': updatedAt.toIso8601String(),
+      // posterName không cần được lưu vào DB vì nó sẽ được join từ bảng profiles
     };
   }
 
