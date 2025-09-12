@@ -1,3 +1,5 @@
+import 'package:blog/core/error/error_handler.dart';
+import 'package:blog/core/error/exceptions.dart';
 import 'package:blog/core/error/failures.dart';
 import 'package:blog/core/network/connection_checker.dart';
 import 'package:blog/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -27,14 +29,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, User>> _getUser(Future<User> Function() fn) async {
     try {
       if (!await (connectionChecker.isConnected)) {
-        return left(Failure('No internet connection'));
+        return left(NetworkFailure('No internet connection'));
       }
       final user = await fn();
       return right(user);
     } on sb.AuthException catch (e) {
-      return left(Failure(e.message));
+      return left(AuthFailure(e.message));
     } catch (e) {
-      return left(Failure(e.toString()));
+      return left(ServerFailure(e.toString()));
     }
   }
 
@@ -59,23 +61,25 @@ class AuthRepositoryImpl implements AuthRepository {
       if (!await (connectionChecker.isConnected)) {
         final session = remoteDataSource.currentSession;
         if (session == null) {
-          return left(Failure('User not logged in !'));
+          return left(AuthFailure('User not logged in'));
         }
-        return right(UserModel(
-          id: session.user.id
-        , email: session.user.email ?? ''
-        , name: '',
-        ));
+        return right(
+          UserModel(
+            id: session.user.id,
+            email: session.user.email ?? '',
+            name: '',
+          ),
+        );
       }
       final user = await remoteDataSource.getCurrentUser();
       if (user == null) {
-        return left(Failure('User not logged in !'));
+        return left(AuthFailure('User not logged in'));
       }
       return right(user);
     } on sb.AuthException catch (e) {
-      return left(Failure(e.message));
+      return left(AuthFailure(e.message));
     } catch (e) {
-      return left(Failure(e.toString()));
+      return left(ServerFailure(e.toString()));
     }
   }
 }

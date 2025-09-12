@@ -14,7 +14,7 @@ class BlogModel extends Blog {
     super.posterName,
   });
 
-  /// copyWith để update một số field mà không cần tạo mới toàn bộ
+  /// Create a copy of this BlogModel with specified fields replaced with new values
   BlogModel copyWith({
     String? id,
     String? posterId,
@@ -37,7 +37,7 @@ class BlogModel extends Blog {
     );
   }
 
-  /// Map -> BlogModel
+  /// Create a BlogModel from a map (typically from database or API)
   factory BlogModel.fromMap(Map<String, dynamic> map) {
     return BlogModel(
       id: map['id'] as String,
@@ -53,7 +53,7 @@ class BlogModel extends Blog {
     );
   }
 
-  /// BlogModel -> Map
+  /// Convert this BlogModel to a map for database storage or API requests
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -63,14 +63,26 @@ class BlogModel extends Blog {
       'image_url': imageUrl,
       'topics': topics,
       'updated_at': updatedAt.toIso8601String(),
-      // posterName không cần được lưu vào DB vì nó sẽ được join từ bảng profiles
+      // posterName is not stored in DB as it's joined from profiles table
     };
   }
 
-  /// JSON string -> BlogModel
+  /// Create a BlogModel from a JSON string
   factory BlogModel.fromJson(String source) =>
       BlogModel.fromMap(jsonDecode(source));
 
-  /// BlogModel -> JSON string
+  /// Convert this BlogModel to a JSON string for local storage
   String toJson() => jsonEncode(toMap());
+
+  @override
+  String toString() => 'BlogModel(id: $id, title: $title)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is BlogModel && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

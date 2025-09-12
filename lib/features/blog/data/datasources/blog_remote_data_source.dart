@@ -27,6 +27,8 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
           .single();
 
       return BlogModel.fromMap(response);
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -38,8 +40,14 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
     required BlogModel blog,
   }) async {
     try {
-      await supabaseClient.storage.from('blog_images').upload(blog.id, image);
-      return supabaseClient.storage.from('blog_images').getPublicUrl(blog.id);
+      // Add a unique path to prevent collisions
+      final String path = '${blog.id}_${DateTime.now().millisecondsSinceEpoch}';
+
+      // Upload the image
+      await supabaseClient.storage.from('blog_images').upload(path, image);
+
+      // Return the public URL
+      return supabaseClient.storage.from('blog_images').getPublicUrl(path);
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -53,7 +61,9 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
           .select('*, profiles(name)')
           .order('updated_at', ascending: false);
 
-      return response.map<BlogModel>((blog) => BlogModel.fromMap(blog)).toList();
+      return response
+          .map<BlogModel>((blog) => BlogModel.fromMap(blog))
+          .toList();
     } catch (e) {
       throw ServerException(e.toString());
     }

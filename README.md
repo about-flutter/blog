@@ -1,16 +1,48 @@
-# blog
+# Flutter Blog Application
 
-A new Flutter project.
+A modern blog application built with Flutter using Clean Architecture, BLoC pattern, and modular design.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- User authentication (sign up, login, logout)
+- Create and manage blog posts
+- Offline support with local caching
+- Display blog posts with author information
 
-A few resources to get you started if this is your first Flutter project:
+## Refactored Improvements
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. **Standardized Project Structure**: Consistent folder organization and naming conventions
+2. **Dependency Injection**: Proper DI with Flutter Modular and singleton management
+3. **Navigation**: Centralized routing with guards and a navigation service
+4. **Error Handling**: Comprehensive error handling system with proper exceptions and failures
+5. **Local Storage**: Efficient caching with Hive TypeAdapters
+6. **Authentication**: Secure auth flow with proper session management
+7. **Code Documentation**: Added meaningful documentation to classes and methods
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Tech Stack
+
+- **Flutter**: UI framework
+- **Supabase**: Backend service for authentication and data storage
+- **flutter_bloc**: State management
+- **flutter_modular**: Dependency injection and routing
+- **Hive**: Local storage for offline support
+- **fpdart**: Functional programming with Either type for error handling
+
+## Project Structure
+
+The application follows Clean Architecture principles with the following layers:
+
+### Presentation Layer
+- **Blocs/Cubits**: Manage UI state
+- **Views**: UI screens
+- **Widgets**: Reusable UI components
+
+### Domain Layer
+- **Entities**: Core business models
+- **Repositories**: Abstract definitions of data operations
+- **Usecases**: Business logic use cases
+
+### Data Layer
+- **Repositories Implementations**: Concrete implementations of repositories
+- **Data Sources**: Remote and local data sources
+- **Models**: Data models extending domain entities

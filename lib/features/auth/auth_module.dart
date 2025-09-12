@@ -1,4 +1,5 @@
 import 'package:blog/app_module.dart';
+import 'package:blog/core/constants/route_constants.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:blog/features/auth/presentation/view/login_screen.dart';
 import 'package:blog/features/auth/presentation/view/signup_screen.dart';
@@ -11,13 +12,13 @@ class AuthModule extends Module {
 
   @override
   void binds(i) {
-    // Tất cả dependencies đã được đăng ký trong AppModule
+    // Dependencies are injected in AppModule
   }
 
   @override
   void routes(RouteManager r) {
     r.child(
-      '/',
+      RouteConstants.authRoot,
       child: (context) => BlocProvider.value(
         value: Modular.get<AuthBloc>(),
         child: const LoginScreen(),
@@ -25,7 +26,7 @@ class AuthModule extends Module {
     );
 
     r.child(
-      '/signup',
+      RouteConstants.signUp,
       child: (context) => BlocProvider.value(
         value: Modular.get<AuthBloc>(),
         child: const SignUpScreen(),

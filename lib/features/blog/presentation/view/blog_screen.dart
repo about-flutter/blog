@@ -1,4 +1,5 @@
 import 'package:blog/core/common/widgets/loader.dart';
+import 'package:blog/core/navigation/navigation_service.dart';
 import 'package:blog/core/theme/appPalette.dart';
 import 'package:blog/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog/features/blog/presentation/widgets/blog_card.dart';
@@ -29,16 +30,11 @@ class _BlogScreenState extends State<BlogScreen> {
         actions: [
           IconButton(
             icon: const Icon(CupertinoIcons.add_circled),
-            onPressed: () {
-              // Use Modular navigation instead of Navigator
-              Modular.to.pushNamed('/blog/add');
-            },
+            onPressed: () => NavigationService.navigateToAddBlog(),
           ),
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              Modular.to.navigate('/auth/');
-            },
+            icon: const Icon(CupertinoIcons.person_circle),
+            onPressed: () => NavigationService.navigateToProfile(),
           ),
         ],
       ),

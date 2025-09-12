@@ -7,10 +7,10 @@ import 'package:blog/core/utils/pick_image.dart';
 import 'package:blog/core/utils/show_snackbar.dart';
 import 'package:blog/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog/features/blog/presentation/widgets/blog_edt.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+
 
 class AddNewBlogScreen extends StatefulWidget {
   const AddNewBlogScreen({super.key});
@@ -30,7 +30,8 @@ class _AddNewBlogScreenState extends State<AddNewBlogScreen> {
     if (pickedImage != null) {
       setState(() {
         image = pickedImage;
-        print('Đã lấy ảnh: ${image?.path}');
+        // Use proper logging instead of print statements
+        debugPrint('Image selected: ${image?.path}');
       });
     }
   }
@@ -51,51 +52,59 @@ class _AddNewBlogScreenState extends State<AddNewBlogScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          BlocConsumer<BlogBloc, BlogState>(
-            listener: (context, state) {
-              if (state is BlogUpLoadSuccess) {
-                showSnackBar(context, 'Blog uploaded successfully!');
-                Modular.to.navigate('/blog/');
-              } else if (state is BlogFailure) {
-                showSnackBar(context, state.message);
-              }
-            },
-            builder: (context, state) {
-              if (state is BlogLoading) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Loader(),
-                );
-              }
-              return IconButton(
-                onPressed: () {
-                  if (titleController.text.isEmpty ||
-                      contentController.text.isEmpty) {
-                    showSnackBar(context, 'Please fill all fields');
-                    return;
-                  }
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          // Use Modular navigation to maintain consistent navigation
+          Modular.to.pop();
+        },
+      ),
+      actions: [
+        BlocConsumer<BlogBloc, BlogState>(
+        listener: (context, state) {
+          if (state is BlogUpLoadSuccess) {
+            showSnackBar(context, 'Blog uploaded successfully!');
+            // Use a single navigation method consistently
+            Modular.to.navigate('/blog/');
+          } else if (state is BlogFailure) {
+            showSnackBar(context, state.message);
+          }
+        },
+        builder: (context, state) {
+          if (state is BlogLoading) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Loader(),
+          );
+          }
+          return IconButton(
+          onPressed: () {
+            if (titleController.text.isEmpty ||
+              contentController.text.isEmpty) {
+            showSnackBar(context, 'Please fill all fields');
+            return;
+            }
 
-                  if (selectedTopics.isEmpty) {
-                    showSnackBar(context, 'Please select at least one topic');
-                    return;
-                  }
+            if (selectedTopics.isEmpty) {
+            showSnackBar(context, 'Please select at least one topic');
+            return;
+            }
 
-                  BlocProvider.of<BlogBloc>(context).add(
-                    BlogUpload(
-                      image: image,
-                      title: titleController.text.trim(),
-                      content: contentController.text.trim(),
-                      posterId: userId,
-                      topics: selectedTopics,
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.done_rounded),
-              );
-            },
-          ),
-        ],
+            BlocProvider.of<BlogBloc>(context).add(
+            BlogUpload(
+              image: image,
+              title: titleController.text.trim(),
+              content: contentController.text.trim(),
+              posterId: userId,
+              topics: selectedTopics,
+            ),
+            );
+          },
+          icon: const Icon(Icons.done_rounded),
+          );
+        },
+        ),
+      ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -161,7 +170,8 @@ class _AddNewBlogScreenState extends State<AddNewBlogScreen> {
                                     selectedTopics.add(e);
                                   }
                                   setState(() {
-                                    print(selectedTopics);
+                                    // Use proper logging instead of print statements
+                                    debugPrint('Selected topics: $selectedTopics');
                                   });
                                 },
                                 child: Chip(
